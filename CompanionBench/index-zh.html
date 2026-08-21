@@ -54,25 +54,36 @@ nav.top{
 }
 nav.top .inner{
   max-width:var(--maxw);margin:0 auto;padding:0 28px;height:50px;
-  display:flex;align-items:center;gap:22px;overflow-x:auto;scrollbar-width:none;
+  display:flex;align-items:center;
 }
-nav.top .inner::-webkit-scrollbar{display:none}
+/* only the links scroll — the language switch sits outside that box, so it can
+   never overlap a menu item however narrow the window gets */
+nav.top .links{
+  display:flex;align-items:center;gap:17px;height:50px;
+  flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;
+}
+nav.top .links::-webkit-scrollbar{display:none}
+/* .ovf is set by script only while the row is wider than its box */
+nav.top .links.ovf{
+  -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 26px),transparent);
+          mask-image:linear-gradient(to right,#000 calc(100% - 26px),transparent);
+}
 nav.top .brand{
   font-family:var(--serif);font-size:16px;font-weight:600;letter-spacing:.01em;
-  color:var(--ink);border:0;white-space:nowrap;flex:0 0 auto;
+  color:var(--ink);border:0;white-space:nowrap;flex:0 0 auto;margin-right:22px;
 }
 nav.top .brand b{color:var(--teal)}
 nav.top a.lk{
-  border:0;font-size:12.5px;letter-spacing:.075em;text-transform:uppercase;
+  border:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
   color:var(--ink-3);white-space:nowrap;
 }
 nav.top a.lk:hover{color:var(--clay)}
 nav.top a.lk.on{color:var(--ink);}
 nav.top .sp{flex:1 1 auto}
 nav.top .lang{
-  position:sticky;right:0;flex:0 0 auto;margin-left:10px;display:inline-flex;
+  flex:0 0 auto;margin-left:18px;display:inline-flex;
   border:1px solid var(--rule-2);border-radius:999px;overflow:hidden;
-  background:var(--paper);box-shadow:-13px 0 11px 1px var(--paper);
+  background:var(--paper);
 }
 nav.top .lang a{
   border:0;font-size:12px;letter-spacing:.05em;padding:3px 11px;line-height:1.65;
@@ -80,6 +91,7 @@ nav.top .lang a{
 }
 nav.top .lang a:hover{color:var(--clay)}
 nav.top .lang a.on{background:var(--ink);color:var(--paper)}
+@media (max-width:1220px){nav.top a.lk[href="#cite"]{display:none}}
 
 /* ---------- hero ---------- */
 header.hero{padding:76px 0 8px;text-align:center;position:relative}
@@ -385,6 +397,7 @@ h2,h3{letter-spacing:0}
 <nav class="top">
   <div class="inner">
     <a class="brand" href="#top">Companion<b>Bench</b></a>
+    <div class="links">
     <a class="lk" href="#overview">总览</a>
     <a class="lk" href="#construction">构建</a>
     <a class="lk" href="#gate">Disclosure&nbsp;Gate</a>
@@ -395,6 +408,7 @@ h2,h3{letter-spacing:0}
     <a class="lk" href="#validity">效度</a>
     <span class="sp"></span>
     <a class="lk" href="#cite">BibTeX</a>
+    </div>
     <span class="lang"><a href="index.html" hreflang="en">EN</a><a class="on" href="index-zh.html" aria-current="page">中文</a></span>
   </div>
 </nav>
@@ -974,6 +988,16 @@ if (!('IntersectionObserver' in window)) {
   /* failsafe: if nothing got revealed, the observer isn't firing — show everything */
   setTimeout(()=>{ if(!document.querySelector('.rv.in')) rvAll.forEach(el=>el.classList.add('in')); }, 2000);
 }
+
+/* ---------------- nav: fade the link row only while it overflows ---------------- */
+const navLinks = document.querySelector('nav.top .links');
+function navOvf(){
+  if(!navLinks) return;
+  navLinks.classList.toggle('ovf', navLinks.scrollWidth - navLinks.clientWidth > 2);
+}
+navOvf();
+addEventListener('resize', navOvf);
+addEventListener('load', navOvf);
 
 /* ---------------- nav highlight ---------------- */
 const secs = [...document.querySelectorAll('section[id]')];
