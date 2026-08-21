@@ -69,6 +69,17 @@ nav.top a.lk{
 nav.top a.lk:hover{color:var(--clay)}
 nav.top a.lk.on{color:var(--ink);}
 nav.top .sp{flex:1 1 auto}
+nav.top .lang{
+  position:sticky;right:0;flex:0 0 auto;margin-left:10px;display:inline-flex;
+  border:1px solid var(--rule-2);border-radius:999px;overflow:hidden;
+  background:var(--paper);box-shadow:-13px 0 11px 1px var(--paper);
+}
+nav.top .lang a{
+  border:0;font-size:12px;letter-spacing:.05em;padding:3px 11px;line-height:1.65;
+  color:var(--ink-3);
+}
+nav.top .lang a:hover{color:var(--clay)}
+nav.top .lang a.on{background:var(--ink);color:var(--paper)}
 
 /* ---------- hero ---------- */
 header.hero{padding:76px 0 8px;text-align:center;position:relative}
@@ -379,6 +390,7 @@ footer .fl{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;al
     <a class="lk" href="#validity">Validity</a>
     <span class="sp"></span>
     <a class="lk" href="#cite">BibTeX</a>
+    <span class="lang"><a class="on" href="index2.html" aria-current="page">EN</a><a href="index2-zh.html" hreflang="zh-Hans">中文</a></span>
   </div>
 </nav>
 
